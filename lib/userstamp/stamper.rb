@@ -40,4 +40,6 @@ module Ddb #:nodoc:
   end
 end
 
-ActiveRecord::Base.send(:include, Ddb::Userstamp::Stamper) if defined?(ActiveRecord)
+ActiveSupport.on_load(:active_record) do
+  ActiveRecord::Base.send(:include, Ddb::Userstamp::Stamper)
+end

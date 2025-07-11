@@ -81,13 +81,13 @@ module Ddb #:nodoc:
           class_eval do
             belongs_to :creator, :class_name => self.stamper_class_name.to_s.singularize.camelize,
                                  :foreign_key => self.creator_attribute
-                                 
+
             belongs_to :updater, :class_name => self.stamper_class_name.to_s.singularize.camelize,
                                  :foreign_key => self.updater_attribute
-                                 
+
             before_save     :set_updater_attribute
             before_create   :set_creator_attribute
-                                 
+
             if defined?(Caboose::Acts::Paranoid)
               belongs_to :deleter, :class_name => self.stamper_class_name.to_s.singularize.camelize,
                                    :foreign_key => self.deleter_attribute
@@ -148,4 +148,6 @@ module Ddb #:nodoc:
   end
 end
 
-ActiveRecord::Base.send(:include, Ddb::Userstamp::Stampable) if defined?(ActiveRecord)
+ActiveSupport.on_load(:active_record) do
+  ActiveRecord::Base.send(:include, Ddb::Userstamp::Stampable)
+end
